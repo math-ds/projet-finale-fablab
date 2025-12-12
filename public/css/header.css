@@ -1,0 +1,421 @@
+/* ========== HEADER ========== */
+
+* {
+  box-sizing: border-box;
+}
+
+.barre-navigation {
+  background-color: #ffffff;
+  border-bottom: 2px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.conteneur-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ Centrage par défaut */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 70px;
+  gap: 2rem;
+  position: relative;
+}
+
+/* Logo */
+.logo-entete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.3s ease;
+  position: absolute; /* ✅ Permet de ne pas influencer le centrage */
+  left: 2rem;
+  top: -1px;
+}
+
+.logo-entete img {
+  height: 95px;
+  width: auto;
+}
+
+.logo-entete:hover {
+  opacity: 0.8;
+}
+
+/* Menu principal */
+.liens-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex: 1;
+  text-align: center;
+}
+
+.lien-nav {
+  color: #232e59;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.lien-nav::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #00afa7;
+  transition: width 0.3s ease;
+}
+
+.lien-nav:hover {
+  color: #00afa7;
+}
+
+.lien-nav:hover::after {
+  width: 100%;
+}
+
+/* Bouton menu */
+.bouton-menu {
+  display: none;
+  background: none;
+  border: none;
+  color: #232e59;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  position: absolute;
+  left: 1rem;
+}
+
+.bouton-menu:hover {
+  color: #00afa7;
+}
+
+/* Liens connexion/inscription */
+.liens-authentification {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: absolute;
+  right: 2rem; /* ✅ Pour rester fixe à droite */
+}
+
+.liens-authentification .lien-nav {
+  font-size: 0.9rem;
+}
+
+.btn-inscription {
+  background-color: #00afa7;
+  color: #ffffff !important;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-inscription:hover {
+  background-color: #008b8a !important;
+  color: #ffffff !important;
+}
+
+.btn-inscription::after {
+  display: none;
+}
+
+/* Menu mobile */
+.menu-mobile {
+  display: none;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 2px solid #f0f0f0;
+  flex-direction: column;
+  padding: 0;
+  z-index: 999;
+}
+
+.menu-mobile.active {
+  display: flex;
+}
+
+.menu-mobile .lien-nav {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+  display: block;
+}
+
+.menu-mobile .lien-nav::after {
+  display: none;
+}
+
+.menu-mobile-auth {
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.menu-mobile-auth .lien-nav {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.menu-mobile-auth .btn-inscription {
+  background-color: #00afa7;
+  color: #ffffff !important;
+  padding: 0.75rem 1rem;
+}
+
+/* Message bienvenue */
+.welcome-msg {
+  font-weight: 500;
+  color: #232e59;
+  margin-right: 1rem;
+  white-space: nowrap;
+}
+
+/* ========== PROFIL DROPDOWN ========== */
+
+.profil-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.profil-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.profil-trigger:hover {
+  background-color: #f0f0f0;
+}
+
+.profil-avatar-svg {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 175, 167, 0.2));
+}
+
+.profil-trigger:hover .profil-avatar-svg {
+  transform: scale(1.1);
+}
+
+.profil-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profil-nom {
+  font-weight: 600;
+  color: #232e59;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.profil-role {
+  font-size: 0.75rem;
+  color: #00afa7;
+  font-weight: 500;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dropdown */
+.profil-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.profil-dropdown.active {
+  display: block;
+}
+
+.profil-dropdown-header {
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #f9f9f9;
+}
+
+.profil-dropdown-item {
+  padding: 0.75rem 1rem;
+  color: #232e59;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.profil-dropdown-item:hover {
+  background-color: #000000;
+  color: #00afa7;
+}
+
+.profil-dropdown-item.danger {
+  color: #d32f2f;
+}
+
+.profil-dropdown-item.danger:hover {
+  background-color: #ffebee;
+  color: #d32f2f;
+} /* --- MENU PROFIL (bleu clair #232E59 + turquoise #00AFA7) --- */
+.profil-dropdown-menu,
+.profil-dropdown-menu ul,
+.profil-dropdown-menu li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profil-dropdown-menu {
+  border-radius: 12px;
+  padding: 8px 0;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profil-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  color: #232e59; /* bleu clair principal du site */
+  text-decoration: none;
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+.profil-dropdown-item:hover {
+  background: rgba(0, 175, 167, 0.18); /* 💧 turquoise au hover */
+  color: #00afa7; /* turquoise principal du site */
+}
+
+.profil-dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 8px 0;
+}
+
+.profil-dropdown-item.danger {
+  color: #ff6b6b;
+}
+
+.profil-dropdown-item.danger:hover {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 1024px) {
+  .conteneur-navigation {
+    padding: 0 1.5rem;
+  }
+
+  .liens-navigation {
+    gap: 1.5rem;
+  }
+
+  .lien-nav {
+    font-size: 0.9rem;
+  }
+
+  .logo-entete img {
+    height: 45px;
+  }
+}
+
+@media (max-width: 768px) {
+  .conteneur-navigation {
+    height: 60px;
+    padding: 0 1rem;
+    gap: 1rem;
+    justify-content: space-between; /* ✅ Reprend le comportement mobile */
+  }
+
+  .logo-entete {
+    position: static;
+  }
+
+  .logo-entete img {
+    height: 40px;
+  }
+
+  .bouton-menu {
+    display: block;
+    position: static;
+  }
+
+  .liens-navigation {
+    display: none;
+  }
+
+  .liens-authentification {
+    display: none;
+  }
+
+  .menu-mobile {
+    top: 60px;
+  }
+
+  .profil-dropdown {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .conteneur-navigation {
+    height: 55px;
+    padding: 0 0.75rem;
+  }
+
+  .logo-entete img {
+    height: 35px;
+  }
+
+  .menu-mobile {
+    top: 55px;
+  }
+}
