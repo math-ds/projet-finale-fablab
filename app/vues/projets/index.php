@@ -6,10 +6,10 @@
 <div class="particles" id="particles"></div>
 
 <section class="hero-section"> 
-    <h1 class="hero-title">Mes Projets</h1>
+    <h1 class="hero-title">Les Projets</h1>
     <p class="hero-subtitle">
-        Découvrez mes réalisations et projets développés avec passion. 
-        Chaque création reflète ma créativité et mon savoir-faire technique.
+        Découvrez les projets réalisés au sein du Fablab d’AJC Formation.
+Cette section met en avant des réalisations développées autour de la robotique, de l’électronique et des technologies numériques.
     </p>
 </section>
 <section class="section-recherche">

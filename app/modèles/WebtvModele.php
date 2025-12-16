@@ -1,45 +1,96 @@
 <?php
-class WebtvModele {
-    // Plus tard tu pourras connecter une base de données
-    // Pour l’instant, on simule des données (comme ton ancien code)
-    public function getVideos() {
-        return [
-            [
-                'id' => 'x8Pc9hqTEO8',
-                'title' => 'Introduction au Fablab',
-                'description' => 'Présentation générale du FabLab et de ses projets innovants en robotique.',
-                'start' => 2
-            ],
-            [
-                'id' => 'mSyo25hKnfo',
-                'title' => 'Robotique & Impression 3D',
-                'description' => 'Projet étudiant de robotique utilisant des pièces imprimées en 3D.',
-                'start' => 35
-            ],
-            [
-                'id' => 'Ikownb7GSjE',
-                'title' => 'Impression 3D avancée',
-                'description' => 'Techniques d\'impression 3D complexes utilisées dans le FabLab.',
-                'start' => 58
-            ],
-            [
-                'id' => 'msY6LTbBc2s',
-                'title' => 'Atelier Robotique',
-                'description' => 'Démonstration robotique et présentation des projets étudiants associés.',
-                'start' => 0
-            ],
-            [
-                'id' => 'N8R8eWBI8Qk',
-                'title' => 'Découpe laser',
-                'description' => 'Formation à l\'utilisation de la découpe laser pour créer des prototypes.',
-                'start' => 0
-            ],
-            [
-                'id' => 'qJ6B_0Xv06E',
-                'title' => 'Projets collaboratifs',
-                'description' => 'Présentation de projets collaboratifs menés par la communauté du FabLab.',
-                'start' => 0
-            ]
-        ];
+require_once __DIR__ . '/../config/database.php';
+
+class WebtvModele
+{
+    private PDO $db;
+    
+    public function __construct() 
+    { 
+        $this->db = getDatabase(); 
+    }
+
+    /**
+     * Récupère toutes les vidéos avec filtres optionnels
+     */
+    public function all(?string $q = null, ?string $cat = null): array
+    {
+        $where = [];
+        $params = [];
+
+        if ($q && trim($q) !== '') {
+            $where[] = "(titre LIKE :q OR description LIKE :q OR auteur LIKE :q)";
+            $params[':q'] = "%" . trim($q) . "%";
+        }
+        
+        if ($cat && trim($cat) !== '') {
+            $where[] = "categorie = :cat";
+            $params[':cat'] = trim($cat);
+        }
+
+        $sql = "SELECT id, titre, description, categorie, type, fichier, youtube_id, 
+                       vignette, vues, duree, auteur, likes, created_at
+                FROM videos";
+        
+        if ($where) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
+        
+        $sql .= " ORDER BY created_at DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère les catégories distinctes
+     */
+    public function categories(): array
+    {
+        $sql = "SELECT DISTINCT categorie 
+                FROM videos 
+                WHERE categorie IS NOT NULL AND categorie != '' 
+                ORDER BY categorie ASC";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Trouve une vidéo par son ID
+     */
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM videos WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $video = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $video ?: null;
+    }
+
+    /**
+     * Trouve une vidéo par son youtube_id
+     */
+    public function findByYoutubeId(string $youtubeId): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM videos WHERE youtube_id = :y LIMIT 1");
+        $stmt->execute([':y' => $youtubeId]);
+        $video = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $video ?: null;
+    }
+
+    /**
+     * Incrémente le compteur de vues
+     */
+    public function incrementViews(int $id): void
+    {
+        $stmt = $this->db->prepare("UPDATE videos SET vues = COALESCE(vues, 0) + 1 WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+    }
+
+    /**
+     * Compte le nombre total de vidéos
+     */
+    public function count(): int
+    {
+        return (int) $this->db->query("SELECT COUNT(*) FROM videos")->fetchColumn();
     }
 }
